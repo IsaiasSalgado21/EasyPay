@@ -5,21 +5,38 @@ namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
     /**
      * Seed the application's database.
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $profe = User::create([
+            'name' => 'angel',
+            'email' => 'profe@test.com',
+            'password' => Hash::make('password'), 
+        ]);
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        // Le asignamos $1000 dólares iniciales directamente en la base de datos
+        $profe->wallet()->create([
+            'balance' => 100000000.00,
+            'currency' => 'USD'
+        ]);
+
+        // Crear al usuario "Alumno"
+        $alumno = User::create([
+            'name' => 'Alumno de Prueba',
+            'email' => 'alumno@test.com',
+            'password' => Hash::make('password'), // La contraseña será: password
+        ]);
+
+        // Le asignamos $0 dólares iniciales
+        $alumno->wallet()->create([
+            'balance' => 0.00,
+            'currency' => 'USD'
         ]);
     }
 }

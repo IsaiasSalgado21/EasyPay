@@ -7,6 +7,8 @@ return new class extends Migration
 {
     public function up(): void
     {
+        DB::unprepared("DROP PROCEDURE IF EXISTS sp_process_transfer;");
+        
         // Inyección de SQL Puro, Procedimiento Almacenado Principal
         DB::unprepared("
             CREATE PROCEDURE sp_process_transfer(
@@ -23,7 +25,7 @@ return new class extends Migration
                 -- se cancela todo (ROLLBACK) y se re-lanza el error al backend.
                 DECLARE EXIT HANDLER FOR SQLEXCEPTION
                 BEGIN
-                    ROLLBACK;s
+                    ROLLBACK;
                     RESIGNAL; 
                 END;
 
