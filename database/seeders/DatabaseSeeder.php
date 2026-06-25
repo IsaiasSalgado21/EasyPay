@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Wallet;
 use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
@@ -14,6 +15,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $admin = User::create([
+            'name' => 'Administrador del Sistema',
+            'email' => 'admin@paypal.com',
+            'password' => Hash::make('password123'),
+            'is_admin' => true,
+        ]);
+
+        Wallet::create([
+            'user_id' => $admin->id, 
+            'balance' => 0.00,
+            'currency' => 'USD'
+        ]);
+
         $profe = User::create([
             'name' => 'angel',
             'email' => 'profe@test.com',

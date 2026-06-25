@@ -20,7 +20,7 @@
             <div class="w-8 h-8 bg-indigo-500 rounded-lg flex items-center justify-center text-white font-bold">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
             </div>
-            <span class="text-xl font-bold text-white tracking-wide">EasyPay</span>
+            <span class="text-xl font-bold text-white tracking-wide"></span>
         </div>
         
         <div class="p-4 mt-auto">
@@ -125,6 +125,50 @@
                 </div>
             </div>
 
+            <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-100">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="p-2 bg-slate-100 rounded-lg text-slate-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold">Retirar Fondos</h3>
+                        <p class="text-xs text-slate-400 uppercase tracking-wider font-semibold">Comisión: 3%</p>
+                    </div>
+                </div>
+
+                <form id="withdrawForm" onsubmit="event.preventDefault();" class="space-y-5">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Monto a retirar ($)</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 font-mono">$</div>
+                            <input type="number" id="withdrawAmount" required min="1" step="0.01" 
+                                oninput="updateWithdrawPreview()"
+                                placeholder="0.00" 
+                                class="w-full pl-8 pr-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-slate-900 outline-none transition bg-slate-50 font-mono font-bold">
+                        </div>
+                    </div>
+
+                    <!-- Panel Técnico de Vista Previa -->
+                    <div id="withdrawPreview" class="hidden space-y-3 bg-slate-900 text-white p-4 rounded-xl font-mono text-sm">
+                        <div class="flex justify-between border-b border-slate-700 pb-2">
+                            <span class="text-slate-400">Comisión (3%):</span>
+                            <span id="feeResult">-$0.00</span>
+                        </div>
+                        <div class="flex justify-between pt-1">
+                            <span class="text-slate-300 font-bold">Total Neto:</span>
+                            <span id="netResult" class="text-indigo-400 font-bold">$0.00</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" 
+                            id="btnRetiro"
+                            onclick="procesarRetiro(this)"
+                            class="w-full bg-slate-800 hover:bg-slate-950 text-white font-semibold py-3.5 rounded-xl transition shadow-lg flex justify-center items-center gap-2 disabled:opacity-50">
+                        <span id="btnText">Solicitar Retiro</span>
+                    </button>
+                </form>
+            </div>
+
             <!-- Columna Derecha (Historial Dinámico) -->
             <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 flex flex-col">
                 <div class="flex justify-between items-center mb-6">
@@ -168,4 +212,20 @@
         </div>
     </main>
 </body>
+<script>
+    function updateWithdrawPreview() {
+        const amount = parseFloat(document.getElementById('withdrawAmount').value) || 0;
+        const preview = document.getElementById('withdrawPreview');
+        
+        if (amount > 0) {
+            preview.classList.remove('hidden');
+            const fee = amount * 0.03;
+            const net = amount - fee;
+            document.getElementById('feeResult').innerText = `-$${fee.toFixed(2)}`;
+            document.getElementById('netResult').innerText = `$${net.toFixed(2)}`;
+        } else {
+            preview.classList.add('hidden');
+        }
+    }
+</script>
 </html>

@@ -14,6 +14,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     
     Route::post('/transfer', [TransferController::class, 'store'])->name('transfer.store');
+
+    Route::get('/admin', [App\Http\Controllers\AdminController::class, 'index'])->name('admin.index');
 });
 
 Route::middleware('auth')->group(function () {
